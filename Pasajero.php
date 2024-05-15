@@ -49,7 +49,7 @@ class Pasajero{
     
     public function __toString()
     {
-        return "   Nombre: ".$this->getNombre()."\n".
+        return "  Nombre: ".$this->getNombre()."\n".
                "   DNI: ".$this->getDni()."\n".
                "   Numero asiento: ".$this->getNumAsiento()."\n".
                "   Numero de ticket del viaje: ".$this->getTicket()."\n".

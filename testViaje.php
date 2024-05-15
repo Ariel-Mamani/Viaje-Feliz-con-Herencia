@@ -1,5 +1,5 @@
 <?php
-include 'viajeFeliz.php';
+include 'ViajeFeliz.php';
 include 'Pasajero.php';
 include 'ResponsableV.php';
 include 'PasajeroVip.php';
@@ -18,7 +18,7 @@ $objPasajero4 = new PasajeroVip("elsa","66666666",8,13,6,400);
 $colPasajero = [$objPasajero1,$objPasajero2,$objPasajero3,$objPasajero4];
 
 $objResponsable = new Responsable("17",215477,"luis","luis");
-$objViaje = new Viaje(0021,"san martin",5,$colPasajero,$objResponsable);
+$objViaje = new Viaje(0021,"san martin",5,$colPasajero,$objResponsable,500,5000);
 //echo $objViaje->mostrarPasajeros();
 
 //Menu modifiicar informacion del viaje
@@ -77,10 +77,11 @@ do{
     echo "Menú de opciones\n".
          "********************************************************\n".
          "* 1) Cargar la información del viaje                   *\n".
-         "* 2) Modificar datos del viaje(Agregar un pasajero al viaje) \n".
+         "* 2) Modificar datos del viaje                         *\n".
          "* 3) Modificar pasajero                                *\n".
          "* 4) Modificar responsable                             *\n".
-         "* 5) Ver datos del viaje                               *\n".
+         "* 5) Vender pasaje                                     *\n".
+         "* 6) Ver datos del viaje                               *\n".
          "********************************************************\n".
          "Ingrese la opcion deseada: ";    
     $opcion = trim(fgets(STDIN));
@@ -114,7 +115,7 @@ do{
             modificaInfoPasajero($objViaje);
             if($objViaje->verificaEspacio() != false ){
                 echo "Se agrego correctamente un pasajero";
-                echo $objViaje->getPasajeros();
+                echo $objViaje->retornaCadena($objViaje->getPasajeros());
             }else{
                 echo "++++++++++++ NO HAY ESPACIO ++++++++++++++ \n ";
             }
@@ -123,6 +124,17 @@ do{
             modificaInformacionResponsable($objViaje);
         break;
         case 5:
+            //              [ PASAJERO COMUN ]  
+            //$nuevoPasajeroo= new Pasajero(raul","1010101",10,20);
+
+            //             [ PASAJERO ESPECIAL ] 
+            //$nuevoPasajero= new PasajeroEspecial("raul","1010101",10,20,true,true,true);
+
+            //                [ PASAJERO VIP ] 
+            $nuevoPasajero= new PasajeroVIP("raul","1010101",10,20,12,350);
+            echo "su importe a abonar es de $".$objViaje->venderPasaje($nuevoPasajero)."\n";
+        break;
+        case 6:
             echo $objViaje;
         break;
         default:
@@ -164,7 +176,7 @@ function modificaViaje($objViaje,$eleccion){
 function modificaInfoPasajero($elViaje){
     $pasajeros= $elViaje->getPasajeros();
     echo "En el viaje hay". count($pasajeros). "pasajeros \n";
-    echo $elViaje->mostrarPasajero();
+    echo $elViaje->retornaCadena($pasajeros);
     echo "Ingrese el DNI del pasajero que quiere modificar su informacion:\n";
     $dniPasajero= trim(fgets(STDIN));
     $aPasajero= $elViaje->buscarPasajero($dniPasajero);

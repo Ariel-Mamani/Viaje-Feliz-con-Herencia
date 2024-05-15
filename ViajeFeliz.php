@@ -70,26 +70,39 @@ class Viaje{
         return "*CODIGO DEL VIAJE: ".$this->getCodigo()."\n".
                "*DESTINO: ".$this->getDestino()."\n".
                "*CAMTIDAD MAXIMA DE PASAJEROS: ".$this->getCantMaxima()."\n".
-               "*PASAJEROS: "."\n".$this->mostrarPasajeros()."\n".
+               "*PASAJEROS: "."\n".$this->retornaCadena($this->getPasajeros())."\n".
                "*RESPONSABLE: "."\n".$this->getResponsable()."\n".
                "*COSTO VIAJE: "."\n".$this->getCostoViaje()."\n".
                "*SUMA COSTOs ABONADOS: "."\n".$this->getSumaCosto()."\n";
     }
-    //MUESTRA paajeros
-    public function mostrarPasajeros(){
-        $pasajeros=$this->getPasajeros();
-        $i=1;
-        foreach($pasajeros as $pasajero){
-            echo $i.": ".$pasajero."\n";
+    
+    public function retornaCadena($coleccion){
+        $cadena=" ";
+        foreach($coleccion as $elemento){
+            $cadena=$cadena." ".$elemento."\n";
+        }
+        return $cadena;
+    }
+    public function buscarPasajero($dniPasajero){
+        $colPasajeros = $this->getPasajeros();
+        $indice = null;
+        $i  = 0;
+        $verifica  = false;
+        while($i<count($colPasajeros) && !$verifica){
+            if($dniPasajero==$colPasajeros[$i]->getDni()){
+                $indice = $i;
+                $verifica = true;
+            }
             $i++;
         }
+        return $indice;
     }
     //Verifica que haya lugar para agregar un pasajero mas
     public function verificaEspacio(){
         $verifica=false;
         $maximo=$this->getCantMaxima();
         $cantPasajeros=$this->getPasajeros();
-        if(count($cantPasajeros)<$maximo){
+        if(count($cantPasajeros) < $maximo){
             $verifica=true;
         }
         return $verifica;
@@ -97,12 +110,11 @@ class Viaje{
 
     // VERIFICA que el pasajero no este cargado mas de una vez en el viaje
     public function pasajeroCargado($documento){
-        $dni=$documento;
         $coleccionPasajeros=$this->getPasajeros();
         $bandera=false;
         $i=0;
-        while($i<count($coleccionPasajeros) && $bandera){
-            if($coleccionPasajeros[$i]->getDni()==$dni){
+        while($i<count($coleccionPasajeros) && !$bandera){
+            if($coleccionPasajeros[$i]->getDni()==$documento){
                 $bandera=true;
             }
             $i++;
@@ -149,19 +161,19 @@ class Viaje{
      a la colección de pasajeros (solo si hay espacio disponible), actualizar los costos 
      abonados y retornar el costo final que deberá ser abonado por el pasajero */
     public function venderPasaje($objPasajero){
-        $cosoAbonar = -1;
+        $costoAbonar = -1;
         $costoViaje= $this->getCostoViaje();
         $dniPasajero = $objPasajero->getDni();
         $verificaEspacio = $this->verificaEspacio();
-        $pasajeroCargardo = $this->pasajeroCargado($dniPasajero);
-        if($verificaEspacio &&  $pasajeroCargardo ){
+        $pasajeroCargado = $this->pasajeroCargado($dniPasajero);
+        if($verificaEspacio &&  !$pasajeroCargado ){
             $this->agregarPasajero($objPasajero); 
             $costoAbonar= $costoViaje + ($costoViaje*($objPasajero->darPorcentajeIncremento()/100));
             $costoAbonadoPorPasajeros= $this->getSumaCosto();
             $costoAbonadoPorPasajeros+= $costoAbonar;
             $this->setSumaCosto($costoAbonadoPorPasajeros);
         }
-        return $cosoAbonar;
+        return $costoAbonar;
     }
 
     /*Implemente la función hayPasajesDisponible() que retorna verdadero si la cantidad 

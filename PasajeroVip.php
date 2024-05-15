@@ -35,9 +35,9 @@ class PasajeroVIP extends Pasajero{
     public function __toString()
     {
         $cadena = parent::__toString();
-        $cadena.="Numero viajero: ".$this->getNumViajero();
-        $cadena.="Millas: ".$this->getMillas();
-        $cadena.="Porcentaje incremento: ".$this->getIncrementoVip();
+        $cadena.="\n +  Numero viajero: ".$this->getNumViajero()."\n";
+        $cadena.=" +  Millas: ".$this->getMillas()."\n";
+        $cadena.=" +  Porcentaje incremento: ".$this->getIncrementoVip()."\n";
         return $cadena;
     }
     /* Implementar el método darPorcentajeIncremento() que retorne el porcentaje que debe 

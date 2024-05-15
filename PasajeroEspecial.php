@@ -39,9 +39,9 @@ class PasajeroEspecial extends Pasajero{
     public function __toString()
     {
         $cadena= parent::__toString();
-        $cadena.="Silla de ruedas: ".$this->getSilla();
-        $cadena.="Asistencia: ".$this->getAsistencia();
-        $cadena.="Comida especial: ".$this->getComidaEspecial();
+        $cadena.="\n +  Silla de ruedas: ".$this->getSilla()."\n";
+        $cadena.=" +  Asistencia: ".$this->getAsistencia()."\n";
+        $cadena.=" +  Comida especial: ".$this->getComidaEspecial()."\n";
         return $cadena;
     }
     /* Si el pasajero tiene necesidades especiales y requiere silla de ruedas, asistencia
