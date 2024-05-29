@@ -150,10 +150,11 @@ class Viaje{
     }
     
     //Funcion que SETEA los valores que tenia objViaje(codigo,destino,capacidad maxima)
-    public function modificaInformacion($codigo,$destino,$cantMaxima){
+    public function modificaInformacion($codigo,$destino,$cantMaxima,$costoViaje){
         $this->setCodigo($codigo);
         $this->setDestino($destino);
         $this->setCantMaxima($cantMaxima);
+        $this->setCostoViaje($costoViaje);
     }
     
 
@@ -163,12 +164,12 @@ class Viaje{
     public function venderPasaje($objPasajero){
         $costoAbonar = -1;
         $costoViaje= $this->getCostoViaje();
-        $dniPasajero = $objPasajero->getDni();
+        $dniPasajero = $objPasajero->getDocumento();
         $verificaEspacio = $this->verificaEspacio();
         $pasajeroCargado = $this->pasajeroCargado($dniPasajero);
         if($verificaEspacio &&  !$pasajeroCargado ){
             $this->agregarPasajero($objPasajero); 
-            $costoAbonar= $costoViaje + ($costoViaje*($objPasajero->darPorcentajeIncremento()/100));
+            $costoAbonar= $costoViaje + ($costoViaje*($objPasajero->darPorcentajeIncremento()));
             $costoAbonadoPorPasajeros= $this->getSumaCosto();
             $costoAbonadoPorPasajeros+= $costoAbonar;
             $this->setSumaCosto($costoAbonadoPorPasajeros);

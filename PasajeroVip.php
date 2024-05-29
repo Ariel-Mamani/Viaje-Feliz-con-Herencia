@@ -4,14 +4,12 @@
 class PasajeroVIP extends Pasajero{
     private $numViajeroFrecuente;
     private $millasPasajero;
-    private $incrementoVip;
 
-    public function __construct($nombre,$dni,$asiento,$ticket,$numViajeroFrecuente,$millasPasajero)
+    public function __construct($nombre,$apellido,$documento,$telefono,$numAsiento,$numPasaje,$numViajeroFrecuente,$millasPasajero)
     {
-        parent::__construct($nombre,$dni,$asiento,$ticket);
+        parent::__construct($nombre,$apellido,$documento,$telefono,$numAsiento,$numPasaje);
         $this->numViajeroFrecuente = $numViajeroFrecuente;
         $this->millasPasajero = $millasPasajero;
-        $this->incrementoVip = 35;
     }
     public function getNumViajero(){
         return $this->numViajeroFrecuente;
@@ -25,19 +23,12 @@ class PasajeroVIP extends Pasajero{
     public function setMillas($millas){
         $this->millasPasajero=$millas;
     }
-    public function getIncrementoVip(){
-        return $this->incrementoVip;
-    }
-    public function setIncrementoVip($porcentaje){
-        $this->incrementoVip=$porcentaje;
-    }
 
     public function __toString()
     {
         $cadena = parent::__toString();
         $cadena.="\n +  Numero viajero: ".$this->getNumViajero()."\n";
         $cadena.=" +  Millas: ".$this->getMillas()."\n";
-        $cadena.=" +  Porcentaje incremento: ".$this->getIncrementoVip()."\n";
         return $cadena;
     }
     /* Implementar el método darPorcentajeIncremento() que retorne el porcentaje que debe 
@@ -45,10 +36,10 @@ class PasajeroVIP extends Pasajero{
      se incrementa el importe un 35% y si la cantidad de millas acumuladas supera a las 
      300 millas se realiza un incremento del 30% */
     public function darPorcentajeIncremento(){
-        $porcentajeIncremneto = parent::darPorcentajeIncremento() + $this->getIncrementoVip() ;
+        $porcentajeIncremneto = parent::darPorcentajeIncremento() + 0.35 ;
         $millasAcumuladas = $this->getMillas();
         if($millasAcumuladas > 300){
-            $porcentajeIncremneto += 30;
+            $porcentajeIncremneto = 0.30;
         }
         return $porcentajeIncremneto;
     }

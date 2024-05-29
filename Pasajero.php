@@ -1,18 +1,20 @@
 <?php
 class Pasajero{
     private $nombre;
-    private $dni;
+    private $apellido;
+    private $documento;
+    private $telefono;
     private $numAsiento;
-    private $numTicket;
-    private $porcentajIncremento;
+    private $numPasaje;
     
-    public function __construct($nombre,$dni,$asiento,$ticket)
+    public function __construct($nombre,$apellido,$documento,$telefono,$numAsiento,$numPasaje)
     {
-        $this->nombre=$nombre;
-        $this->dni=$dni;
-        $this->numAsiento=$asiento;
-        $this->numAsiento=$ticket;
-        $this->porcentajIncremento=10;
+        $this->nombre = $nombre;
+        $this->apellido = $apellido;
+        $this->documento = $documento;
+        $this->telefono = $telefono;
+        $this->numAsiento = $numAsiento;
+        $this->numPasaje = $numPasaje;
         
     }
     // GETTERS Y SETTERS
@@ -22,11 +24,23 @@ class Pasajero{
     public function setNombre($nombre){
         $this->nombre=$nombre;
     }
-    public function getDni(){
-        return $this->dni;
+    public function getApellido(){
+        return $this->apellido;
     }
-    public function setDni($dni){
-        $this->dni=$dni;
+    public function setApellido($apellido){
+        $this->apellido = $apellido;
+    }
+    public function getDocumento(){
+        return $this->documento;
+    }
+    public function setDocumento($num){
+        $this->numAsiento=$num;
+    }
+    public function getTelefono(){
+        return $this->telefono;
+    }
+    public function setTelefono($telefono){
+        $this->telefono = $telefono;
     }
     public function getNumAsiento(){
         return $this->numAsiento;
@@ -34,26 +48,21 @@ class Pasajero{
     public function setNumAsiento($num){
         $this->numAsiento=$num;
     }
-    public function getTicket(){
-        return $this->numTicket;
+    public function getNumPasaje(){
+        return $this->numAsiento;
     }
-    public function setTicket($ticket){
-        $this->numTicket=$ticket;
-    }
-    public function getPorcentajeIncremento(){
-        return $this->porcentajIncremento;
-    }
-    public function setPorcentajeIncremento($porcentaje){
-        $this->porcentajIncremento=$porcentaje;
+    public function setNumPasaje($num){
+        $this->numPasaje=$num;
     }
     
     public function __toString()
     {
         return "  Nombre: ".$this->getNombre()."\n".
-               "   DNI: ".$this->getDni()."\n".
+               "   Apellido: ".$this->getApellido()."\n".
+               "   Documento: ".$this->getDocumento()."\n".
+               "   Telefono: ".$this->getTelefono()."\n".
                "   Numero asiento: ".$this->getNumAsiento()."\n".
-               "   Numero de ticket del viaje: ".$this->getTicket()."\n".
-               "   Porcentaje incremento: ".$this->getPorcentajeIncremento()."%"."\n";
+               "   Numero pasaje: ".$this->getNumPasaje()."\n";
 ;
     }
 
@@ -61,7 +70,7 @@ class Pasajero{
     debe aplicarse como incremento según las características del pasajero
     Por último, para los pasajeros comunes el porcentaje de incremento es del 10 % */
     public function darPorcentajeIncremento(){
-        $porcentajeIncremneto= $this->getPorcentajeIncremento();
+        $porcentajeIncremneto= 0;
         return $porcentajeIncremneto;
     }
 }

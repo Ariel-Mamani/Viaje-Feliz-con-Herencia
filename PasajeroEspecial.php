@@ -9,9 +9,9 @@ class PasajeroEspecial extends Pasajero{
 
     //Si el pasajero tiene necesidades especiales y requiere silla de ruedas, asistencia 
     // y comida especial entonces
-    public function __construct($nombre,$dni,$asiento,$ticket,$sillaDeRuedas,$asistencia,$comidaEspecial)
+    public function __construct($nombre,$apellido,$documento,$telefono,$numAsiento,$numPasaje,$sillaDeRuedas,$asistencia,$comidaEspecial)
     {
-        parent::__construct($nombre,$dni,$asiento,$ticket);
+        parent::__construct($nombre,$apellido,$documento,$telefono,$numAsiento,$numPasaje);
         $this->sillaDeRuedas = $sillaDeRuedas;
         $this->asistencia = $asistencia;
         $this->comidaEspecial = $comidaEspecial;
@@ -42,6 +42,7 @@ class PasajeroEspecial extends Pasajero{
         $cadena.="\n +  Silla de ruedas: ".$this->getSilla()."\n";
         $cadena.=" +  Asistencia: ".$this->getAsistencia()."\n";
         $cadena.=" +  Comida especial: ".$this->getComidaEspecial()."\n";
+        $cadena.=" +  Porcentaje incremento: ".$this->darPorcentajeIncremento()."\n";       
         return $cadena;
     }
     /* Si el pasajero tiene necesidades especiales y requiere silla de ruedas, asistencia
@@ -52,20 +53,11 @@ class PasajeroEspecial extends Pasajero{
         $requiereAsistencia = $this->getAsistencia();
         $comidaEspecial = $this->getComidaEspecial();
         $incremento = parent::darPorcentajeIncremento();
-        $coServicios = [$requiereSillaRuedas, $requiereAsistencia , $comidaEspecial];
-        $num = 0;
-        foreach($coServicios as $servicio){
-            if($servicio){
-                $num++;
-            }
+        if($requiereSillaRuedas == "si" && $requiereAsistencia == "si" &&  $comidaEspecial== "si"){
+            $incremento = 0.30;
+        }elseif($requiereSillaRuedas == "si" || $requiereAsistencia == "si" ||  $comidaEspecial== "si"){
+            $incremento = 0.22;
         }
-        if($num == 3){
-            $pasajeIncremento = $incremento + 30;
-        }elseif($num == 2){
-            $pasajeIncremento = $incremento + 22;
-        }else{
-            $pasajeIncremento = $incremento + 15;
-        }
-        return $pasajeIncremento;
+        return $incremento;
     }
 }               

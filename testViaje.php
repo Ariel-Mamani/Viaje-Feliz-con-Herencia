@@ -4,21 +4,19 @@ include 'Pasajero.php';
 include 'ResponsableV.php';
 include 'PasajeroVip.php';
 include 'PasajeroEspecial.php';
+include 'PasajeroEstandar.php';
 
 
 // COLECCION DE PASAJEROS
-// PASAJERO NORMAL: $nombre,$dni,$asiento,$ticket
-//VIP : $numViajeroFrecuente,$millasPasajero,
-//ESPECIAL :$sillaDeRuedas,$asistencia,$comidaEspecial
-
-$objPasajero1 = new Pasajero("esteban","3333333",5,10);
-$objPasajero2 = new PasajeroVip("clara","44444444",6,11,2,200);
-$objPasajero3 = new PasajeroEspecial("ines","55555555",7,12, true, true,true);
-$objPasajero4 = new PasajeroVip("elsa","66666666",8,13,6,400);
+//$nombre,$apellido,$documento,$telefono,$numAsiento,$numPasaje
+$objPasajero1 = new PasajeroEstandar("esteban","quito","3333333",29900000,5,10);
+$objPasajero2 = new PasajeroVip("yaqui","sieras","44444444",29911111,6,11,2,200);
+$objPasajero3 = new PasajeroEspecial("ines","cesario","55555555",29222222,7,12,"si","si","si");
+$objPasajero4 = new PasajeroVip("luis","luis","66666666",29933333,8,13,6,400);
 $colPasajero = [$objPasajero1,$objPasajero2,$objPasajero3,$objPasajero4];
 
 $objResponsable = new Responsable("17",215477,"luis","luis");
-$objViaje = new Viaje(0021,"san martin",5,$colPasajero,$objResponsable,500,5000);
+$objViaje = new Viaje(0021,"san martin",5,$colPasajero,$objResponsable,10,0);
 //echo $objViaje->mostrarPasajeros();
 
 //Menu modifiicar informacion del viaje
@@ -39,8 +37,9 @@ function menu_ModifInfo_pasajero(){
     echo "_______________________________________________\n";
     echo "      ¿que desea modificar del pasajero?       \n";
     echo "              1) El nombre                     \n";
-    echo "              2) El DNI                        \n";
-    echo "              3) Asiento                       \n";
+    echo "              2) El apellido                   \n";
+    echo "              3) El DNI                        \n";
+    echo "              4) El telefono                   \n";
     echo "_______________________________________________\n";
     $opcion= trim(fgets(STDIN));
     echo "\n";
@@ -63,13 +62,36 @@ function menu_ModifInfo_responsable(){
 function solicitarDatosPasajero(){
     echo "Ingrese nombre del pasajero: ";
     $nombre=trim(fgets(STDIN));
+    echo "Ingrese el apellido: ";
+    $apellido=trim(fgets(STDIN));
     echo "Ingrese el DNI: ";
     $dni=trim(fgets(STDIN));
+    echo "Ingrese el numero de telefono: ";
+    $telefono=trim(fgets(STDIN));
     echo "Ingrese el numero de asiento: ";
-    $asiento=trim(fgets(STDIN));
-    echo "Ingrese el numero del ticket: ";
-    $numTicket=trim(fgets(STDIN));
-    $objPasajeroNuevo= new Pasajeros($nombre,$dni,$asiento,$numTicket);
+    $numAsiento=trim(fgets(STDIN));
+    echo "Ingrese el numero de pasajero: ";
+    $numPasajero=trim(fgets(STDIN));
+    echo "Ingrese el tipo de pasajero a cargar: estandar - vip - especial: ";
+    $tipoPasajero = trim(fgets(STDIN));
+    if($tipoPasajero == "estandar"){
+        $objPasajeroNuevo= new PasajeroEstandar($nombre,$apellido,$dni,$telefono,$numAsiento,$numPasajero);
+    }elseif($tipoPasajero == "vip"){
+        echo "Ingrese las millas del pasajero: \n ";
+        $millas = trim(fgets(STDIN));
+        echo "Ingrese el numero de viajero frecuente: \n";
+        $numViajeroFrecuente = trim(fgets(STDIN));
+        $objPasajeroNuevo = new PasajeroVIP($nombre,$apellido,$dni,$telefono,$numAsiento,$numPasajero,$numViajeroFrecuente,$millas);
+    }elseif($tipoPasajero == "especial"){
+        echo "Ingrese si necesita silla de ruedas el pasajero: \n ";
+        $sillaDeRuedas = trim(fgets(STDIN));
+        echo "Ingrese si necesita asistencia el pasajero: \n";
+        $asistencia = trim(fgets(STDIN));
+        echo "Ingrese si necesita comida especial el pasajero: \n ";
+        $comida = trim(fgets(STDIN));
+        $objPasajeroNuevo = new PasajeroEspecial($nombre,$apellido,$dni,$telefono,$numAsiento,$numPasajero,$sillaDeRuedas,$asistencia,$comida);
+    }
+    
     return $objPasajeroNuevo;
 }
 
@@ -124,15 +146,8 @@ do{
             modificaInformacionResponsable($objViaje);
         break;
         case 5:
-            //              [ PASAJERO COMUN ]  
-            //$nuevoPasajeroo= new Pasajero(raul","1010101",10,20);
-
-            //             [ PASAJERO ESPECIAL ] 
-            //$nuevoPasajero= new PasajeroEspecial("raul","1010101",10,20,true,true,true);
-
-            //                [ PASAJERO VIP ] 
-            $nuevoPasajero= new PasajeroVIP("raul","1010101",10,20,12,350);
-            echo "su importe a abonar es de $".$objViaje->venderPasaje($nuevoPasajero)."\n";
+            $nuevoPasajero= solicitarDatosPasajero();
+            echo "Su importe a abonar es de $".$objViaje->venderPasaje($nuevoPasajero)."\n";
         break;
         case 6:
             echo $objViaje;
@@ -176,7 +191,7 @@ function modificaViaje($objViaje,$eleccion){
 function modificaInfoPasajero($elViaje){
     $pasajeros= $elViaje->getPasajeros();
     echo "En el viaje hay". count($pasajeros). "pasajeros \n";
-    echo $elViaje->retornaCadena($pasajeros);
+    echo $elViaje->mostrarPasajero();
     echo "Ingrese el DNI del pasajero que quiere modificar su informacion:\n";
     $dniPasajero= trim(fgets(STDIN));
     $aPasajero= $elViaje->buscarPasajero($dniPasajero);
@@ -192,23 +207,33 @@ function modificaInfoPasajero($elViaje){
                 echo "Se cambio correctamente a ". $unPasajero->getNombre(). "\n";
             break;
             case 2:
-                echo $unPasajero->getDni(). " es el DNI actual \n";
+                echo $unPasajero->getApellido(). " es el apellido actual \n";
                 echo "Se cambiara a: ";
-                $nuevoDni= trim(fgets(STDIN));
-                $unPasajero->setDni($nuevoDni);
-                echo "Se cambio correctamente a ". $unPasajero->getDni(). "\n";
+                $nuevoApellido= trim(fgets(STDIN));
+                $unPasajero->setApellido($nuevoApellido);
+                echo "Se cambio correctamente a ". $unPasajero->getApellido(). "\n";
             break;
             case 3:
+                echo $unPasajero->getTelefono(). " es el telefono actual \n";
+                echo "Se cambiara a: ";
+                $nuevoTelefono= trim(fgets(STDIN));
+                $unPasajero->setTelefono($nuevoTelefono);
+                echo "Se cambio correctamente a ". $unPasajero->getTeleono(). "\n";
+            break;
+            case 4:
                 echo $unPasajero->getNombre(). " es el nombre actual \n";
                 echo "Se cambiara a: ";
                 $nuevoNombre= trim(fgets(STDIN));
-                echo $unPasajero->getDni(). " es el DNI actual \n";
+                echo $unPasajero->getApellido(). " es el apellido actual \n";
                 echo "Se cambiara a: ";
-                $nuevoDni = trim(fgets(STDIN));
+                $nuevoApellido= trim(fgets(STDIN));
+                echo $unPasajero->getTelefono(). " es el telefono actual \n";
+                echo "Se cambiara a: ";
+                $nuevoTelefono= trim(fgets(STDIN));
                 echo "Se cambiaron correctamente los datos \n";
             break;
             default:
-                echo "OPCION INCORRECTA, ingrese opcion valida 1 al 3 \n";
+                echo "OPCION INCORRECTA, ingrese opcion valida 1 al 4 \n";
         }
     }else{
         echo "No existe un pasajero con ese numero de documento. Lo damos de alta? s/n \n";
@@ -220,6 +245,8 @@ function modificaInfoPasajero($elViaje){
     return $unPasajero;
 
 }
+
+
 
 //Funcion que modifica la informacion del responsable
 function modificaInformacionResponsable($elViaje){
